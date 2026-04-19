@@ -7,7 +7,6 @@ export interface RegisterRequest {
     name: string;
     email: string;
     password: string;
-    confirmPassword: string;
 }
 
 export interface AuthResponse {
@@ -24,4 +23,13 @@ export interface AuthUser {
     role: 'admin' | 'user' | 'guest';
     isActive: boolean;
   };
+}
+
+export interface OtpRequest {
+  mobile: string;
+}
+
+export interface OtpVerifyRequest {
+  mobile: string;
+  otp: string;
 }

@@ -1,1 +1,170 @@
-<p>login works!</p>
+<div class="login-page">
+
+    <!-- Left panel: brand panel -->
+    <div class="brand-panel">
+        <div class="brand-panel-content">
+            <a routerLink="/" class="brand-logo">
+                <span class="brand-ever">Ever</span><span class="brand-style">Style</span>
+            </a>
+            <h2>Your Style,<br>Your Story.</h2>
+            <p>
+                Sign in to unlock exclusive offers, track your orders and enjoy a
+                personalised shopping experience curated just for you.
+            </p>
+            <div class="brand-features">
+                <div class="brand-feat">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    <span>Exclusive member-only deals</span>
+                </div>
+                <div class="brand-feat">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    <span>Order tracking &amp; history</span>
+                </div>
+                <div class="brand-feat">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    <span>Save addresses &amp; wishlist</span>
+                </div>
+                <div class="brand-feat">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    <span>Early access to new collections</span>
+                </div>
+            </div>
+        </div>
+        <div class="brand-decoration">
+            <div class="bd-circle bd-c1"></div>
+            <div class="bd-circle bd-c2"></div>
+            <div class="bd-circle bd-c3"></div>
+        </div>
+    </div>
+
+    <!-- Right panel: form -->
+    <div class="form-panel">
+        <div class="form-panel-inner">
+
+            <!-- Mobile logo -->
+            <a routerLink="/" class="mobile-logo">
+                <span class="brand-ever">Ever</span><span class="brand-style">Style</span>
+            </a>
+
+            <!-- ── STEP 1: Phone number ── -->
+            @if (step() === 'phone') {
+            <div class="form-section">
+                <h1>Welcome Back</h1>
+                <p class="form-subtext">Enter your mobile number to receive a one-time password.</p>
+
+                <form (ngSubmit)="requestOtp()">
+                    <div class="form-group">
+                        <label for="phone">Mobile Number</label>
+                        <div class="phone-input-wrapper">
+                            <span class="country-code">
+                                <svg width="16" height="12" viewBox="0 0 28 20" fill="none">
+                                    <rect width="28" height="20" fill="#FF9933" rx="2" />
+                                    <rect y="6.67" width="28" height="6.67" fill="white" />
+                                    <rect y="13.33" width="28" height="6.67" fill="#138808" />
+                                    <circle cx="14" cy="10" r="3" stroke="#000080" stroke-width="1" fill="none" />
+                                </svg>
+                                +91
+                            </span>
+                            <input id="phone" type="tel" inputmode="numeric" maxlength="10"
+                                placeholder="10-digit mobile number" [value]="phone()"
+                                (input)="phone.set($any($event.target).value); errorMsg.set('')"
+                                [disabled]="isLoading()" autocomplete="tel-national" />
+                        </div>
+                    </div>
+
+                    @if (errorMsg()) {
+                    <div class="error-message">{{ errorMsg() }}</div>
+                    }
+
+                    <button type="submit" class="btn-submit" [disabled]="isLoading()">
+                        @if (isLoading()) {
+                        <span class="spinner"></span> Sending OTP…
+                        } @else {
+                        Send OTP
+                        }
+                    </button>
+                </form>
+
+                <div class="demo-info">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    Demo mode &mdash; OTP will be logged to the browser console.
+                </div>
+
+                <p class="back-to-home">
+                    <a routerLink="/">&larr; Continue Shopping</a>
+                </p>
+            </div>
+            }
+
+            <!-- ── STEP 2: OTP entry ── -->
+            @if (step() === 'otp') {
+            <div class="form-section">
+                <button class="back-btn" type="button" (click)="goBack()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6" />
+                    </svg>
+                    Back
+                </button>
+
+                <h1>Enter OTP</h1>
+                <p class="form-subtext">
+                    We\'ve sent a 4-digit code to
+                    <strong>+91 {{ phone() }}</strong>.
+                    <button type="button" class="link-btn" (click)="goBack()">Change</button>
+                </p>
+
+                <form (ngSubmit)="verifyOtp()">
+                    <div class="form-group otp-group">
+                        <app-otp-input [length]="4" (otpChange)="onOtpChange($event)" />
+                    </div>
+
+                    @if (errorMsg()) {
+                    <div class="error-message">{{ errorMsg() }}</div>
+                    }
+
+                    <button type="submit" class="btn-submit" [disabled]="isLoading() || otp().length !== 4">
+                        @if (isLoading()) {
+                        <span class="spinner"></span> Verifying…
+                        } @else {
+                        Verify &amp; Login
+                        }
+                    </button>
+                </form>
+
+                <div class="resend-row">
+                    @if (countdown() > 0) {
+                    <span class="resend-timer">Resend OTP in <strong>{{ countdown() }}s</strong></span>
+                    } @else {
+                    <span>
+                        Didn\'t receive the code?
+                        <button type="button" class="link-btn" (click)="resendOtp()">Resend OTP</button>
+                    </span>
+                    }
+                </div>
+
+                <div class="demo-info">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    Demo mode &mdash; OTP is logged to the browser console.
+                </div>
+            </div>
+            }
+
+        </div>
+    </div>
+</div>

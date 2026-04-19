@@ -16,4 +16,6 @@ export interface CollectionSummary {
     slug: string;
     imageUrl: string;
     productsCount: number;
+    createdAt: Date;
+    updatedAt: Date;
 }

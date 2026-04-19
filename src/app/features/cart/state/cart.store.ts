@@ -49,10 +49,7 @@ export class CartStore {
             return;
         }
         this._items.update(items =>
-            items.map(item => (item.product.id === productId
-                ? { ...item, quantity }
-                : item
-            ))
+            items.map(item => item.product.id === productId ? { ...item, quantity } : item )
         );
     }
 
