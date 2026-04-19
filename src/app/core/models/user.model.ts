@@ -4,7 +4,7 @@ export interface User {
   email: string;
   phone?: string;
   avatarUrl?: string;
-  roles: Role[];
+  role: Role[];
   addresses: Address[];
   createdAt: Date;
   updatedAt: Date;
@@ -25,9 +25,9 @@ export interface Address {
   updatedAt: Date;
 }
 
-
 export interface Role {
   role: 'admin' | 'user' | 'guest';
+  permissions: string[];
   isActive: boolean;
 }
 
