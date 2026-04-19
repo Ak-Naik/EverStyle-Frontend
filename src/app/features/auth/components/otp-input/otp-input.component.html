@@ -1,0 +1,17 @@
+<div class="otp-wrapper">
+    @for (i of getBoxIndices(); track i) {
+        <input 
+            #otpBox
+            type="text"
+            inputmode="numeric"
+            maxlength="1" 
+            class="otp-box"
+            [value]="digits[i]"
+            (input)="onInput($event, i)"
+            (keydown)="onKeyDown($event, i)"
+            (paste)="onPaste($event)"
+            autocomplete="one-time-code"
+            aria-label="OTP digit {{i + 1}}"
+        />
+    }
+</div>
