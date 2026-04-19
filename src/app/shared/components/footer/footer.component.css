@@ -1,0 +1,135 @@
+/* Newsletter band */
+.newsletter-band {
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding: 48px 0;
+}
+.newsletter-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.newsletter-text h3 {
+  font-size: 22px;
+  color: var(--color-primary);
+  margin-bottom: 6px;
+}
+.newsletter-text p {
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+.newsletter-form {
+  display: flex;
+  gap: 10px;
+}
+.newsletter-form input {
+  padding: 12px 18px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  width: 280px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.newsletter-form input:focus { border-color: var(--color-accent); }
+
+/* Footer top */
+.footer-top {
+  background: #1a1a1a;
+  padding: 60px 0 40px;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+}
+
+.footer-logo {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 14px;
+}
+.brand-ever  { color: #fff; }
+.brand-style { color: var(--color-accent); }
+
+.footer-brand p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #aaa;
+  max-width: 260px;
+  margin-bottom: 20px;
+}
+.social-links {
+  display: flex;
+  gap: 12px;
+}
+.social-links a {
+  width: 36px; height: 36px;
+  border: 1px solid #444;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  transition: var(--transition);
+}
+.social-links a:hover { border-color: var(--color-accent); color: var(--color-accent); }
+
+.footer-col h4 {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 18px;
+  letter-spacing: 0.5px;
+}
+.footer-col ul { display: flex; flex-direction: column; gap: 10px; }
+.footer-col ul li a {
+  font-size: 13px;
+  color: #999;
+  transition: color 0.2s;
+}
+.footer-col ul li a:hover { color: var(--color-accent); }
+
+/* Footer bottom */
+.footer-bottom {
+  background: #111;
+  padding: 18px 0;
+}
+.footer-bottom-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.footer-bottom p {
+  font-size: 12px;
+  color: #666;
+}
+.legal-links {
+  display: flex;
+  gap: 20px;
+}
+.legal-links a {
+  font-size: 12px;
+  color: #666;
+  transition: color 0.2s;
+}
+.legal-links a:hover { color: #aaa; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
+  .footer-brand { grid-column: 1 / -1; }
+  .newsletter-inner { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 560px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+  .newsletter-form { flex-direction: column; }
+  .newsletter-form input { width: 100%; }
+}

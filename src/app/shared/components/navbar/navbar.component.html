@@ -1,0 +1,120 @@
+<!-- Announcement bar -->
+<div class="promo-bar" [class.hidden]="isScrolled">
+  <p>
+    ✦ Free shipping on orders above ₹999 &nbsp;|&nbsp;
+    Use code <strong>FIRST20</strong> for 20% off your first order &nbsp;✦
+  </p>
+</div>
+
+<!-- Main navbar -->
+<nav class="navbar" [class.scrolled]="isScrolled">
+  <div class="container nav-inner">
+
+    <!-- Hamburger (mobile) -->
+    <button class="hamburger" (click)="toggleMobileMenu()" aria-label="Toggle menu">
+      <span [class.open]="isMobileMenuOpen"></span>
+      <span [class.open]="isMobileMenuOpen"></span>
+      <span [class.open]="isMobileMenuOpen"></span>
+    </button>
+
+    <!-- Logo -->
+    <a routerLink="/" class="brand" (click)="closeMobileMenu()">
+      <span class="brand-ever">Ever</span><span class="brand-style">Style</span>
+    </a>
+
+    <!-- Desktop nav links -->
+    <ul class="nav-links" [class.mobile-open]="isMobileMenuOpen">
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" (click)="closeMobileMenu()">Home</a></li>
+      <li><a routerLink="/products" (click)="closeMobileMenu()">Men</a></li>
+      <li><a routerLink="/products" (click)="closeMobileMenu()">Women</a></li>
+      <li><a routerLink="/products" (click)="closeMobileMenu()">Kids</a></li>
+      <li><a routerLink="/collections" (click)="closeMobileMenu()">Collections</a></li>
+      <li class="sale-link"><a routerLink="/products" (click)="closeMobileMenu()">Sale</a></li>
+    </ul>
+
+    <!-- Right action icons -->
+    <div class="nav-actions">
+
+      <!-- Search -->
+      <button class="icon-btn" (click)="toggleSearch()" aria-label="Search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+      </button>
+
+      <!-- Wishlist -->
+      <a routerLink="/wishlist" class="icon-btn" aria-label="Wishlist">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+      </a>
+
+      <!-- Account -->
+      <div class="account-wrapper" #accountWrapper>
+        @if (!isLoggedIn()) {
+          <a routerLink="/auth/login" class="icon-btn account-link" aria-label="Login">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <span class="icon-label">Account</span>
+          </a>
+        } @else {
+          <button class="icon-btn account-btn" (click)="toggleAccountDropdown()" aria-label="My Account" aria-haspopup="true" [attr.aria-expanded]="showAccountDropdown">
+            <div class="avatar-circle">{{ getInitials() }}</div>
+            <span class="icon-label">{{ getFirstName() }}</span>
+          </button>
+          @if (showAccountDropdown) {
+            <div class="account-dropdown">
+              <a routerLink="/profile" (click)="showAccountDropdown=false">My Profile</a>
+              <a routerLink="/orders" (click)="showAccountDropdown=false">My Orders</a>
+              <a routerLink="/wishlist" (click)="showAccountDropdown=false">Wishlist</a>
+              <div class="dropdown-divider"></div>
+              <button (click)="logout()">Sign Out</button>
+            </div>
+          }
+        }
+      </div>
+
+      <!-- Cart -->
+      <a routerLink="/cart" class="icon-btn cart-btn" aria-label="Cart">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+        @if (cartCount > 0) {
+          <span class="cart-badge">{{ cartCount }}</span>
+        }
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- Search overlay -->
+@if (isSearchOpen) {
+  <div class="search-overlay" (click)="closeSearchOverlay($event)">
+    <div class="search-box">
+      <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input
+        #searchInput
+        type="text"
+        placeholder="Search products, brands, collections…"
+        [(ngModel)]="searchQuery"
+        (keydown.enter)="onSearch()"
+      />
+      <button class="search-close-btn" (click)="isSearchOpen = false" aria-label="Close search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+}
+
+<!-- Mobile overlay backdrop -->
+@if (isMobileMenuOpen) {
+  <div class="mobile-backdrop" (click)="closeMobileMenu()"></div>
+}

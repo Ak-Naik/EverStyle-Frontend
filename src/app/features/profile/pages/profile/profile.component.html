@@ -1,0 +1,121 @@
+<div class="profile-page"> <!-- Sidebar -->
+    <aside class="profile-sidebar">
+        <div class="sidebar-user">
+            <div class="sidebar-avatar">{{ getInitials() }}</div>
+            <div class="sidebar-user-info"> <strong>{{ user()?.name || 'My Account' }}</strong> <span>+91 {{
+                    user()?.phone }}</span> </div>
+        </div>
+        <nav class="sidebar-nav"> <button class="sidebar-link" [class.active]="activeSection() === 'profile'"
+                (click)="activeSection.set('profile')"> <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </svg> My Profile </button> <button class="sidebar-link" [class.active]="activeSection() === 'orders'"
+                (click)="activeSection.set('orders')"> <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <path d="M16 10a4 4 0 0 1-8 0" />
+                </svg> My Orders </button> <button class="sidebar-link" [class.active]="activeSection() === 'addresses'"
+                (click)="activeSection.set('addresses')"> <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                </svg> Addresses </button> <button class="sidebar-link" [class.active]="activeSection() === 'wishlist'"
+                (click)="activeSection.set('wishlist')"> <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <path
+                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg> Wishlist </button>
+            <div class="sidebar-divider"></div> <button class="sidebar-link sidebar-logout" (click)="logout()"> <svg
+                    width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" y1="12" x2="9" y2="12" />
+                </svg> Sign Out </button>
+        </nav>
+    </aside> <!-- Main content -->
+    <main class="profile-main"> <!-- Header breadcrumb -->
+        <div class="profile-breadcrumb"> <a routerLink="/">Home</a> <span>/</span> <span>My Account</span> </div>
+        <!-- ── Edit Profile section ── --> @if (activeSection() === 'profile') { <div class="profile-section">
+            <div class="section-title">
+                <h2>Edit Profile</h2>
+                <p>Update your personal information.</p>
+            </div> <!-- Avatar card -->
+            <div class="avatar-card">
+                <div class="avatar-xl">{{ getInitials() }}</div>
+                <div class="avatar-card-info"> <strong>{{ user()?.name || '—' }}</strong> <span>{{ user()?.email || 'No
+                        email set' }}</span> <span>+91 {{ user()?.phone }}</span> </div> <button
+                    class="btn-change-photo" disabled> Change Photo </button>
+            </div> <!-- Form -->
+            <form [formGroup]="form" (ngSubmit)="saveProfile()" class="edit-form">
+                <div class="form-row">
+                    <div class="form-group"> <label>Full Name *</label> <input formControlName="name" type="text"
+                            placeholder="Enter your full name" /> @if (form.get('name')?.invalid &&
+                        form.get('name')?.touched) { <span class="field-error">Name must be at least 2
+                            characters.</span> } </div>
+                    <div class="form-group"> <label>Email Address</label> <input formControlName="email" type="email"
+                            placeholder="Enter your email (optional)" /> @if (form.get('email')?.invalid &&
+                        form.get('email')?.touched) { <span class="field-error">Enter a valid email address.</span> }
+                    </div>
+                </div>
+                <div class="form-group"> <label>Mobile Number (verified)</label>
+                    <div class="verified-field"> <span>+91 {{ user()?.phone }}</span> <span class="verified-badge"> <svg
+                                width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg> Verified </span> </div>
+                </div> @if (saveSuccess()) { <div class="success-message"> <svg width="16" height="16"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                        <polyline points="22 4 12 14.01 9 11.01" />
+                    </svg> Profile updated successfully! </div> } <div class="form-actions"> <button type="submit"
+                        class="btn-save" [disabled]="isSaving() || form.invalid"> @if (isSaving()) { <span
+                            class="spinner"></span> Saving… } @else { Save Changes } </button> </div>
+            </form>
+        </div> } <!-- ── Orders section ── --> @if (activeSection() === 'orders') { <div class="profile-section">
+            <div class="section-title">
+                <h2>My Orders</h2>
+                <p>Your order history will appear here.</p>
+            </div>
+            <div class="empty-state"> <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.5">
+                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <path d="M16 10a4 4 0 0 1-8 0" />
+                </svg>
+                <h3>No orders yet</h3>
+                <p>Start shopping and your orders will show up here.</p> <a routerLink="/products"
+                    class="btn-empty-action">Shop Now</a>
+            </div>
+        </div> } <!-- ── Addresses section ── --> @if (activeSection() === 'addresses') { <div class="profile-section">
+            <div class="section-title">
+                <h2>Saved Addresses</h2>
+                <p>Manage your delivery addresses.</p>
+            </div>
+            <div class="empty-state"> <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.5">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                </svg>
+                <h3>No saved addresses</h3>
+                <p>Add your delivery address for faster checkout.</p> <button class="btn-empty-action" disabled>Add
+                    Address</button>
+            </div>
+        </div> } <!-- ── Wishlist section ── --> @if (activeSection() === 'wishlist') { <div class="profile-section">
+            <div class="section-title">
+                <h2>My Wishlist</h2>
+                <p>Items you\'ve saved for later.</p>
+            </div>
+            <div class="empty-state"> <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.5">
+                    <path
+                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
+                <h3>Your wishlist is empty</h3>
+                <p>Save items you love to your wishlist.</p> <a routerLink="/products" class="btn-empty-action">Explore
+                    Products</a>
+            </div>
+        </div> }
+    </main>
+</div>

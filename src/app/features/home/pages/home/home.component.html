@@ -1,0 +1,152 @@
+<!-- ── HERO SECTION ── -->
+<section class="hero">
+  @for (slide of heroSlides; track $index) {
+    <div
+      class="hero-slide"
+      [class.active]="currentSlide === $index"
+      [style.background]="slide.gradient"
+    >
+      <div class="hero-overlay">
+        <div class="container hero-content">
+          <span class="hero-tag">{{ slide.tag }}</span>
+          <h1 class="hero-heading">{{ slide.heading }}</h1>
+          <p class="hero-sub">{{ slide.sub }}</p>
+          <div class="hero-ctas">
+            <a [routerLink]="slide.ctaLink" class="btn btn-accent">{{ slide.cta }}</a>
+            <a [routerLink]="slide.ctaLink" class="btn btn-outline-white">View Lookbook</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Arrows -->
+  <button class="hero-arrow hero-arrow-prev" (click)="prevSlide()" aria-label="Previous">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="15 18 9 12 15 6"/>
+    </svg>
+  </button>
+  <button class="hero-arrow hero-arrow-next" (click)="nextSlide()" aria-label="Next">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="9 18 15 12 9 6"/>
+    </svg>
+  </button>
+
+  <!-- Dots -->
+  <div class="hero-dots">
+    @for (slide of heroSlides; track $index) {
+      <button
+        class="hero-dot"
+        [class.active]="currentSlide === $index"
+        (click)="setSlide($index)"
+        [attr.aria-label]="'Slide ' + ($index + 1)"
+      ></button>
+    }
+  </div>
+</section>
+
+<!-- ── CATEGORIES ── -->
+<section class="section categories-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Shop by Category</h2>
+      <a routerLink="/products" class="see-all">See All &rarr;</a>
+    </div>
+    <div class="categories-grid">
+      @for (cat of categories; track cat.label) {
+        <a [routerLink]="cat.href" class="category-card" [style.background]="cat.gradient">
+          <div class="category-card-inner">
+            <div class="cat-silhouette cat-{{ cat.label.toLowerCase() }}"></div>
+          </div>
+          <div class="category-info">
+            <span class="cat-tag">{{ cat.tag }}</span>
+            <h3>{{ cat.label }}</h3>
+          </div>
+        </a>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURED COLLECTIONS ── -->
+<section class="section collections-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Featured Collections</h2>
+      <a routerLink="/collections" class="see-all">View All &rarr;</a>
+    </div>
+    <div class="collections-grid">
+      @for (col of collections; track col.title) {
+        <a [routerLink]="col.href" class="collection-card" [style.background]="col.gradient">
+          @if (col.badge) {
+            <span class="coll-badge">{{ col.badge }}</span>
+          }
+          <div class="collection-card-body">
+            <h3>{{ col.title }}</h3>
+            <p>{{ col.subtitle }}</p>
+            <span class="coll-cta">Explore &rarr;</span>
+          </div>
+        </a>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ── PROMO BANNER ── -->
+<section class="promo-section">
+  <div class="container promo-inner">
+    <div class="promo-text">
+      <span class="promo-eyebrow">Limited Time Offer</span>
+      <h2>Get 20% Off Your First Order</h2>
+      <p>New customers get an exclusive welcome discount. Use code <strong>FIRST20</strong> at checkout.</p>
+      <a routerLink="/auth/login" class="btn btn-accent">Claim Offer</a>
+    </div>
+    <div class="promo-decoration">
+      <div class="promo-circle promo-circle-1"></div>
+      <div class="promo-circle promo-circle-2"></div>
+      <div class="promo-circle promo-circle-3"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── BRAND VALUES ── -->
+<section class="section values-section">
+  <div class="container values-grid">
+    @for (v of values; track v.label) {
+      <div class="value-card">
+        <div class="value-icon">
+          @switch (v.icon) {
+            @case ('shipping') {
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="1" y="3" width="15" height="13" rx="1"/>
+                <path d="M16 8h4l3 4v4h-7V8z"/>
+                <circle cx="5.5" cy="18.5" r="2.5"/>
+                <circle cx="18.5" cy="18.5" r="2.5"/>
+              </svg>
+            }
+            @case ('returns') {
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <polyline points="1 4 1 10 7 10"/>
+                <path d="M3.51 15a9 9 0 1 0 .49-3.78"/>
+              </svg>
+            }
+            @case ('quality') {
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+            }
+            @case ('secure') {
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            }
+          }
+        </div>
+        <div class="value-text">
+          <strong>{{ v.label }}</strong>
+          <span>{{ v.desc }}</span>
+        </div>
+      </div>
+    }
+  </div>
+</section>
