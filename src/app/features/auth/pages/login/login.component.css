@@ -1,3 +1,9 @@
+/* ── Host element ── */
+:host {
+  display: block;
+  width: 100%;
+}
+
 /* ── Page layout ── */
 .login-page {
   display: flex;
@@ -8,7 +14,7 @@
 /* ── Brand panel (left) ── */
 .brand-panel {
   position: relative;
-  flex: 1;
+  flex: 0 0 50%;
   background: linear-gradient(150deg, #1a0e05 0%, #2d1810 40%, #1a1a2e 100%);
   display: flex;
   align-items: center;
@@ -70,8 +76,7 @@
 
 /* ── Form panel (right) ── */
 .form-panel {
-  width: 480px;
-  flex-shrink: 0;
+  flex: 0 0 50%;
   background: #fff;
   display: flex;
   align-items: center;
