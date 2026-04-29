@@ -1,5 +1,4 @@
 import { Component, Input, Output, EventEmitter, ElementRef, QueryList, ViewChildren, OnInit, OnChanges } from '@angular/core';
-import { OtpLoginComponent } from '../../pages/otp-login/otp-login.component';
 
 @Component({
   selector: 'app-otp-input',
@@ -8,13 +7,14 @@ import { OtpLoginComponent } from '../../pages/otp-login/otp-login.component';
   templateUrl: './otp-input.component.html',
   styleUrls: ['./otp-input.component.css'],
 })
-export class OtpInputComponent {
-  @Input() length: number = 6;
+export class OtpInputComponent implements OnInit {
+  @Input() length = 6;
   @Output() otpComplete = new EventEmitter<string>();
   @Output() otpChange = new EventEmitter<string>();
   @ViewChildren('otpBox') boxes!: QueryList<ElementRef<HTMLInputElement>>;
 
   digits: string[] = []
+  private backspaceActive = false
 
   ngOnInit(): void {
     this.digits = Array(this.length).fill('');
@@ -25,6 +25,7 @@ export class OtpInputComponent {
   }
 
   onInput(event: Event, index: number): void {
+    if (this.backspaceActive) return
     const input = event.target as HTMLInputElement;
     const val = input.value.replace(/\D/g, '').slice(-1);
     this.digits[index] = val;
@@ -36,17 +37,29 @@ export class OtpInputComponent {
   }
 
   onKeyDown(event: KeyboardEvent, index: number): void {
+    // console.log(`[OTP] keydown: key="${event.key}", index=${index}, currentDigit="${this.digits[index]}"`)
     if (event.key === 'Backspace' ) {
-      if (this.digits[index] && index > 0) {
+      this.backspaceActive = true;
+      event.preventDefault();
+
+      if (!this.digits[index] && index > 0) {
         this.digits[index - 1] = '';
-        this.focusBox(index - 1);
         this.emit();
+        setTimeout(() => {
+          const ba = this.boxes?.toArray();
+          if (ba?.[index - 1]) ba[index  -1].nativeElement.value = '';
+          this.focusBox(index - 1);
+          this.backspaceActive = false;
+        });
       } else {
-        this.digits[index - 1] = '';
+        this.digits[index] = '';
         (event.target as HTMLInputElement).value = '';
         this.emit();
+        setTimeout(() => {
+          if (index > 0) this.focusBox(index - 1);
+          this.backspaceActive = false
+        })
       }
-      event.preventDefault();
     }
   }
 
